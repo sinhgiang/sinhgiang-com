@@ -13,6 +13,7 @@ export const links = [
   { label: "X", href: "https://x.com/sinhgiangfd" },
   { label: "GitHub", href: "https://github.com/sinhgiang" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sinh-giang/" },
+  { label: "Facebook", href: "https://www.facebook.com/sinhyangfd" },
 ];
 
 export const nav = [
@@ -22,10 +23,18 @@ export const nav = [
   { label: "About", href: "/about" },
 ];
 
+// Status as each product's own website states it (checked 2026-10-04).
+export type ProductStatus = "Live" | "Coming soon" | "Private use";
+
 export type Product = {
   name: string;
   logo: string;
+  // Short slogan for the home page card, taken from the product's own website.
+  slogan: string;
   tagline: string;
+  status: ProductStatus;
+  // Screenshot of the product's website, captured 2026-10-04.
+  shot: string;
   url: string;
   platforms: string;
   builtWith?: string;
@@ -35,6 +44,9 @@ export const products: Product[] = [
   {
     name: "Wispra",
     logo: "/logos/wispra.png",
+    slogan: "Press one key, speak, and your words appear in any app.",
+    status: "Live",
+    shot: "/shots/wispra.jpg",
     tagline: "Voice dictation and meeting notes for any app: speak, get clean text, summaries and posts.",
     url: "https://wispra-web.vercel.app",
     platforms: "Windows, macOS",
@@ -43,6 +55,9 @@ export const products: Product[] = [
   {
     name: "Lenvid",
     logo: "/logos/lenvid.svg",
+    slogan: "Script, record, caption and cut a talking video in one app.",
+    status: "Coming soon",
+    shot: "/shots/lenvid.jpg",
     tagline: "AI teleprompter for creators: write the script, read it on camera, then caption and trim the clip.",
     url: "https://lenvid.vercel.app",
     platforms: "iPhone, Android",
@@ -51,6 +66,9 @@ export const products: Product[] = [
   {
     name: "Revova",
     logo: "/logos/revova.svg",
+    slogan: "Recover failed subscription payments on autopilot.",
+    status: "Live",
+    shot: "/shots/revova.jpg",
     tagline: "Payment recovery for subscription businesses: emails at the customer's local time, smart retries, win-back.",
     url: "https://revova.io",
     platforms: "Web",
@@ -58,6 +76,9 @@ export const products: Product[] = [
   {
     name: "Timio",
     logo: "/logos/timio.svg",
+    slogan: "AI attendance with face recognition, leave and payroll.",
+    status: "Live",
+    shot: "/shots/timio.jpg",
     tagline: "AI attendance with face recognition, leave and payroll for small teams.",
     url: "https://timio.vn",
     platforms: "Web, iPhone, Android",
@@ -66,6 +87,9 @@ export const products: Product[] = [
   {
     name: "Trekking Tour Sapa",
     logo: "/logos/trekkingtoursapa.webp",
+    slogan: "Sapa trekking tours with local H'mong guides.",
+    status: "Live",
+    shot: "/shots/trekkingtoursapa.jpg",
     tagline: "Website and booking for a local H'mong-led trekking company in Sapa, Vietnam.",
     url: "https://trekkingtoursapa.com",
     platforms: "Web",
@@ -73,6 +97,9 @@ export const products: Product[] = [
   {
     name: "Helme",
     logo: "/logos/helme.svg",
+    slogan: "Run a team of AI agents from one screen.",
+    status: "Private use",
+    shot: "/shots/helme.jpg",
     tagline: "Run a team of AI coding agents from one screen. A Reviewer checks every change before merge.",
     url: "https://helme-web.vercel.app",
     platforms: "Windows",
