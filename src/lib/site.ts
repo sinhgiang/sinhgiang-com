@@ -1,13 +1,26 @@
 // Content for the site. Every fact here comes from the public GitHub profile
 // (github.com/sinhgiang), the product websites, or GitHub repository and release dates.
 
+// The canonical address of the site. Every absolute URL (canonical, sitemap,
+// llms.txt, JSON-LD) is built from it.
+export const siteUrl = "https://sinhgiang.com";
+
 export const profile = {
   name: "Sinh Giang",
   headline: "Founder and product builder from Vietnam.",
+  role: "Founder and product builder",
+  country: "Vietnam",
   intro:
     "I design AI products and ship them end to end with AI coding agents: from the idea and the spec to tests, release, store listing and support.",
   avatar: "/avatar.png",
 };
+
+// From the "How I work" section of the GitHub profile README.
+export const howIWork = [
+  "I own the product: the spec, the decisions and the final review. AI coding agents write, test and review the code under rules I set.",
+  "Every change goes through its own branch, automated tests and a review before it is merged and shipped.",
+  "I ship with TypeScript, Next.js, Electron, Flutter, Supabase, Vercel and Codemagic.",
+];
 
 export const links = [
   { label: "X", href: "https://x.com/sinhgiangfd" },
@@ -28,6 +41,8 @@ export type ProductStatus = "Live" | "Coming soon" | "Private use";
 
 export type Product = {
   name: string;
+  // schema.org type for JSON-LD: an app, or a website built for a client.
+  schemaType: "SoftwareApplication" | "MobileApplication" | "WebApplication" | "WebSite";
   // Official logo file from the product's repository or website.
   logo: string;
   // Optional full mark for sizes above 32 px, one file per page background.
@@ -46,6 +61,7 @@ export type Product = {
 export const products: Product[] = [
   {
     name: "Wispra",
+    schemaType: "SoftwareApplication",
     logo: "/logos/wispra.png",
     slogan: "Press one key, speak, and your words appear in any app.",
     status: "Live",
@@ -57,6 +73,7 @@ export const products: Product[] = [
   },
   {
     name: "Lenvid",
+    schemaType: "MobileApplication",
     logo: "/logos/lenvid.svg",
     slogan: "Script, record, caption and cut a talking video in one app.",
     status: "Coming soon",
@@ -68,6 +85,7 @@ export const products: Product[] = [
   },
   {
     name: "Revova",
+    schemaType: "WebApplication",
     logo: "/logos/revova.svg",
     slogan: "Recover failed subscription payments on autopilot.",
     status: "Live",
@@ -78,6 +96,7 @@ export const products: Product[] = [
   },
   {
     name: "Timio",
+    schemaType: "WebApplication",
     logo: "/logos/timio.svg",
     slogan: "AI attendance with face recognition, leave and payroll.",
     status: "Live",
@@ -89,6 +108,7 @@ export const products: Product[] = [
   },
   {
     name: "Trekking Tour Sapa",
+    schemaType: "WebSite",
     logo: "/logos/trekkingtoursapa.webp",
     slogan: "Sapa trekking tours with local H'mong guides.",
     status: "Live",
@@ -99,6 +119,7 @@ export const products: Product[] = [
   },
   {
     name: "Helme",
+    schemaType: "SoftwareApplication",
     // Helme logo C: the small icon up to 32 px, the full wheel above that.
     logo: "/logos/helme-icon-small.svg",
     mark: { light: "/logos/helme-mark-on-light.svg", dark: "/logos/helme-mark-on-dark.svg" },
@@ -169,7 +190,55 @@ export const stack: { group: string; items: StackItem[] }[] = [
   },
 ];
 
-export type Post = { slug: string; title: string; date: string; summary: string };
+export type Post = {
+  slug: string;
+  title: string;
+  // Publication date, YYYY-MM-DD.
+  date: string;
+  // One or two sentences that answer what the post is about.
+  summary: string;
+  // The post itself, one string per paragraph.
+  body: string[];
+};
 
-// Add posts here. The Writing page shows "Coming soon" while the list is empty.
+// Add posts here, newest first. Each post gets its own page at /writing/<slug>,
+// and the sitemap, llms.txt and llms-full.txt pick it up at the next build.
+// The Writing page shows "Coming soon" while the list is empty.
 export const posts: Post[] = [];
+
+// Title and description of each page, used for metadata, the sitemap and llms.txt.
+export const pages = {
+  home: {
+    path: "/",
+    title: `${profile.name}, founder and product builder from Vietnam`,
+    description: `${profile.name} is a founder and product builder from Vietnam who designs AI products and ships them end to end with AI coding agents.`,
+  },
+  writing: {
+    path: "/writing",
+    title: "Writing",
+    description: `Notes by ${profile.name} on designing AI products and shipping them with AI coding agents.`,
+  },
+  projects: {
+    path: "/projects",
+    title: "Projects",
+    description: `Products ${profile.name} designs and ships with AI coding agents: ${listNames(products.map((p) => p.name))}.`,
+  },
+  stack: {
+    path: "/stack",
+    title: "Stack",
+    description: `The tools ${profile.name} uses to design, build and ship products: ${listNames(
+      stack.flatMap((group) => group.items.map((item) => item.name)),
+    )}.`,
+  },
+  about: {
+    path: "/about",
+    title: "About",
+    description: `About ${profile.name}, a founder and product builder from Vietnam who ships AI products end to end with AI coding agents.`,
+  },
+} as const;
+
+export type PageKey = keyof typeof pages;
+
+export function listNames(names: string[]): string {
+  return names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}

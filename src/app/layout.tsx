@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { profile } from "@/lib/site";
+import { pages, profile, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,23 +13,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
-
-const description = `${profile.headline} ${profile.intro}`;
-
+// Defaults for every page. Each page sets its own title, description,
+// canonical URL and Open Graph data through src/lib/seo.ts.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: profile.name, template: `%s | ${profile.name}` },
-  description,
-  openGraph: {
-    title: profile.name,
-    description,
-    type: "website",
-    images: [{ url: profile.avatar, width: 400, height: 400, alt: profile.name }],
-  },
-  twitter: { card: "summary", creator: "@sinhgiangfd" },
+  title: { default: pages.home.title, template: `%s | ${profile.name}` },
+  description: pages.home.description,
+  authors: [{ name: profile.name, url: siteUrl }],
+  creator: profile.name,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
