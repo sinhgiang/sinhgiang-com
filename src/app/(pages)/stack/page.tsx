@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
 import { PageTitle } from "@/components/section";
 import { stack } from "@/lib/site";
+import { JsonLd } from "@/components/json-ld";
+import { stackJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Stack",
-  description: "The tools I use to design, build and ship my products.",
-};
+export const metadata = pageMetadata("stack");
 
 export default function StackPage() {
   return (
     <>
+      <JsonLd data={stackJsonLd()} />
       <PageTitle title="Stack" intro="The tools I use every day to design, build and ship my products." />
       {stack.map((group) => (
         <section key={group.group} className="mt-12">

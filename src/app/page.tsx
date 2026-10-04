@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { Avatar } from "@/components/avatar";
+import { JsonLd } from "@/components/json-ld";
+import { homeJsonLd, pageMetadata } from "@/lib/seo";
 import { ProductGrid } from "@/components/product-grid";
 import { SocialIcons } from "@/components/social-icons";
 import { Timeline } from "@/components/timeline";
 import { nav, products, profile } from "@/lib/site";
 
+export const metadata = pageMetadata("home");
+
 export default function Home() {
   return (
     <div className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 lg:px-12">
+      <JsonLd data={homeJsonLd()} />
       <nav className="flex justify-end gap-5 py-6 text-sm text-muted">
         {nav.map((item) => (
           <Link key={item.href} href={item.href} className="transition-colors hover:text-foreground">
@@ -72,6 +77,8 @@ export default function Home() {
         </aside>
 
         <main>
+          {/* Heading for screen readers and crawlers; the cards speak for themselves on screen. */}
+          <h2 className="sr-only">Products</h2>
           <ProductGrid />
 
           <section className="mt-6 rounded-3xl bg-card p-6 sm:p-8">

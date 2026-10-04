@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
 import { PostList } from "@/components/post-list";
 import { PageTitle } from "@/components/section";
+import { JsonLd } from "@/components/json-ld";
+import { writingJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Writing",
-  description: "Notes on designing AI products and shipping them with AI coding agents.",
-};
+export const metadata = pageMetadata("writing");
 
 export default function WritingPage() {
   return (
     <>
+      <JsonLd data={writingJsonLd()} />
       <PageTitle
         title="Writing"
         intro="Notes on designing AI products and shipping them with AI coding agents."
