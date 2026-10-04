@@ -1,0 +1,33 @@
+# Backup for Vercel's Git integration: every push to main also calls the
+# project's Deploy Hook (main-backup), so a missed GitHub event still ends in
+# a production deployment. If both run, the later deployment simply replaces
+# the earlier one.
+name: Deploy main to production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
+
+jobs:
+  deploy-hook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call Vercel Deploy Hook
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "::error::Secret VERCEL_DEPLOY_HOOK is not set"
+            exit 1
+          fi
+          status=$(curl -sS -o /dev/null -w "%{http_code}" -X POST "$VERCEL_DEPLOY_HOOK")
+          echo "Deploy Hook answered HTTP $status"
+          [ "$status" -ge 200 ] && [ "$status" -lt 300 ]
