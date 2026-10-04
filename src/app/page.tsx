@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { Avatar } from "@/components/avatar";
 import { ProductGrid } from "@/components/product-grid";
 import { SocialIcons } from "@/components/social-icons";
 import { Timeline } from "@/components/timeline";
@@ -18,16 +18,7 @@ export default function Home() {
 
       <div className="grid gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16 xl:gap-24">
         <aside className="lg:sticky lg:top-10 lg:self-start">
-          <div className="size-36 overflow-hidden rounded-full bg-gradient-to-br from-amber-200 via-amber-300 to-orange-400 sm:size-44">
-            <Image
-              src={profile.avatar}
-              alt={profile.name}
-              width={176}
-              height={176}
-              priority
-              className="size-full object-cover"
-            />
-          </div>
+          <Avatar size={176} priority className="size-36 sm:size-44" />
 
           <h1 className="mt-7 text-4xl font-extrabold tracking-tight sm:text-5xl">{profile.name}</h1>
 
