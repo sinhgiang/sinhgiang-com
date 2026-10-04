@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Avatar } from "@/components/avatar";
 import { nav, profile } from "@/lib/site";
 
 export function Header() {
@@ -9,8 +10,10 @@ export function Header() {
 
   return (
     <header className="flex items-center justify-between gap-4 py-8">
-      <Link href="/" className="font-medium tracking-tight">
-        {profile.name}
+      <Link href="/" className="flex shrink-0 items-center gap-2.5 font-medium tracking-tight">
+        <Avatar size={30} priority className="size-[30px]" />
+        {/* On very narrow phones only the photo shows, so the menu keeps its room. */}
+        <span className="max-[379px]:sr-only">{profile.name}</span>
       </Link>
       <nav className="flex gap-4 text-sm sm:gap-6">
         {nav.map((item) => {

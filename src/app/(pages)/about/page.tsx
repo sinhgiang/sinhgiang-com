@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { Avatar } from "@/components/avatar";
 import { PageTitle } from "@/components/section";
 import { links, products, profile } from "@/lib/site";
 
@@ -14,13 +14,7 @@ export default function AboutPage() {
     <>
       <PageTitle title="About" />
       <div className="mt-8 flex items-center gap-4">
-        <Image
-          src={profile.avatar}
-          alt={profile.name}
-          width={56}
-          height={56}
-          className="size-14 rounded-full border border-border"
-        />
+        <Avatar size={56} className="size-14" />
         <div>
           <p className="font-medium">{profile.name}</p>
           <p className="text-sm text-muted">Founder and product builder, Vietnam</p>
