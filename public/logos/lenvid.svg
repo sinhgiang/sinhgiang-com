@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- The Lenvid logo (design/logo/lenvid-logo.svg) with rounded corners,
+       for browser tabs and the site header. -->
+  <rect width="1024" height="1024" rx="230" fill="#E8A23C"/>
+  <path d="M368 266V700H694" fill="none" stroke="#241F16" stroke-width="148" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="664" cy="336" r="80" fill="#F4F1EA"/>
+</svg>
