@@ -10,3 +10,10 @@ npm install
 npm run dev   # http://localhost:3000
 npm run build
 ```
+
+## Deploying
+
+Pushing to `main` deploys to production twice over: through Vercel's Git integration, and through the
+`Deploy main to production` GitHub Action, which calls the project's Deploy Hook (`main-backup`). The
+hook URL lives only in the repository secret `VERCEL_DEPLOY_HOOK`. The Action can also be run by hand
+from the Actions tab.
