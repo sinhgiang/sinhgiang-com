@@ -28,7 +28,10 @@ export type ProductStatus = "Live" | "Coming soon" | "Private use";
 
 export type Product = {
   name: string;
+  // Official logo file from the product's repository or website.
   logo: string;
+  // Optional full mark for sizes above 32 px, one file per page background.
+  mark?: { light: string; dark: string };
   // Short slogan for the home page card, taken from the product's own website.
   slogan: string;
   tagline: string;
@@ -96,7 +99,9 @@ export const products: Product[] = [
   },
   {
     name: "Helme",
-    logo: "/logos/helme.svg",
+    // Helme logo C: the small icon up to 32 px, the full wheel above that.
+    logo: "/logos/helme-icon-small.svg",
+    mark: { light: "/logos/helme-mark-on-light.svg", dark: "/logos/helme-mark-on-dark.svg" },
     slogan: "Run a team of AI agents from one screen.",
     status: "Private use",
     shot: "/shots/helme.jpg",

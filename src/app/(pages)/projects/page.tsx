@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { ProductLogo } from "@/components/product-logo";
 import { PageTitle } from "@/components/section";
 import { products } from "@/lib/site";
 
@@ -18,13 +18,7 @@ export default function ProjectsPage() {
       <ul className="mt-10 divide-y divide-border">
         {products.map((product) => (
           <li key={product.name} className="flex gap-4 py-6">
-            <Image
-              src={product.logo}
-              alt={`${product.name} logo`}
-              width={40}
-              height={40}
-              className="size-10 shrink-0 rounded-lg"
-            />
+            <ProductLogo product={product} size={40} alt={`${product.name} logo`} />
             <div className="min-w-0">
               <a
                 href={product.url}

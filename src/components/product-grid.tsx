@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ProductLogo } from "@/components/product-logo";
 import { products, type ProductStatus } from "@/lib/site";
 
 const statusDot: Record<ProductStatus, string> = {
@@ -20,13 +21,7 @@ export function ProductGrid() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                <Image
-                  src={product.logo}
-                  alt=""
-                  width={32}
-                  height={32}
-                  className="size-8 shrink-0 rounded-lg"
-                />
+                <ProductLogo product={product} size={32} />
                 <h3 className="truncate text-lg font-bold tracking-tight">{product.name}</h3>
               </div>
               <span className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-medium text-muted">
