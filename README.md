@@ -7,7 +7,7 @@ Personal website of Sinh Giang: products, writing, stack and about.
 - To publish a post, add it to `posts` in `src/lib/site.ts` (slug, title, date, summary, body). It gets its own page at `/writing/<slug>`, and the sitemap, `llms.txt`, `llms-full.txt` and the JSON-LD pick it up at the next build. The Writing page shows "Coming soon" while the list is empty.
 
 ```bash
-npm install
+npm ci
 npm run dev   # http://localhost:3000
 npm test      # checks llms.txt, sitemap, robots, metadata and JSON-LD
 npm run build
