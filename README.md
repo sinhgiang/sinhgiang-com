@@ -40,10 +40,9 @@ from the Actions tab.
 
 Dependabot opens weekly pull requests for npm packages (minor and patch updates come grouped in one pull
 request) and for GitHub Actions. CI (`.github/workflows/ci.yml`) runs `npm ci`, the tests, lint and the
-build on each of them. `.github/dependabot.yml` holds back three major updates that do not work yet:
+build on each of them. `.github/dependabot.yml` holds back two major updates that do not work yet:
 
 | Package | Held back | Why | Lift it when |
 |---|---|---|---|
-| `eslint` | 10 and later | `eslint-plugin-react` 7.37 (used by `eslint-config-next`) crashes on ESLint 10 | `eslint-plugin-react` lists ESLint 10 in its peer range |
-| `typescript` | 6.1 and later | `typescript-eslint` 8 supports TypeScript below 6.1 only, so lint stops | `typescript-eslint` supports the newer TypeScript |
+| `typescript` | 6.1 and later | TypeScript 7.0 has no JavaScript API and `typescript-eslint` 8 supports TypeScript below 6.1 only, so lint stops | TypeScript 7.1 ships its API and `typescript-eslint` supports it |
 | `@types/node` | 25 and later | Vercel and CI run Node 24; newer types would allow APIs Node 24 lacks | the site moves to a newer Node |
