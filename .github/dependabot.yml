@@ -8,6 +8,17 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # ESLint 10 breaks eslint-plugin-react 7.37 (pulled in by
+      # eslint-config-next), whose peer range stops at ESLint 9.
+      - dependency-name: eslint
+        versions: [">=10"]
+      # typescript-eslint 8 supports TypeScript below 6.1 only.
+      - dependency-name: typescript
+        versions: [">=6.1"]
+      # Keep the Node types on the major that Vercel and CI run (Node 24).
+      - dependency-name: "@types/node"
+        versions: [">=25"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
