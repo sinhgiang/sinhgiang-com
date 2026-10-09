@@ -8,6 +8,14 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # TypeScript 7.0 ships no JavaScript API, and typescript-eslint 8 supports
+      # TypeScript below 6.1 only. Revisit when TypeScript 7.1 brings the API.
+      - dependency-name: typescript
+        versions: [">=6.1"]
+      # Keep the Node types on the major that Vercel and CI run (Node 24).
+      - dependency-name: "@types/node"
+        versions: [">=25"]
   - package-ecosystem: github-actions
     directory: /
     schedule:

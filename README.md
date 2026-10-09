@@ -35,3 +35,14 @@ Pushing to `main` deploys to production twice over: through Vercel's Git integra
 `Deploy main to production` GitHub Action, which calls the project's Deploy Hook (`main-backup`). The
 hook URL lives only in the repository secret `VERCEL_DEPLOY_HOOK`. The Action can also be run by hand
 from the Actions tab.
+
+## Dependency updates
+
+Dependabot opens weekly pull requests for npm packages (minor and patch updates come grouped in one pull
+request) and for GitHub Actions. CI (`.github/workflows/ci.yml`) runs `npm ci`, the tests, lint and the
+build on each of them. `.github/dependabot.yml` holds back two major updates that do not work yet:
+
+| Package | Held back | Why | Lift it when |
+|---|---|---|---|
+| `typescript` | 6.1 and later | TypeScript 7.0 has no JavaScript API and `typescript-eslint` 8 supports TypeScript below 6.1 only, so lint stops | TypeScript 7.1 ships its API and `typescript-eslint` supports it |
+| `@types/node` | 25 and later | Vercel and CI run Node 24; newer types would allow APIs Node 24 lacks | the site moves to a newer Node |
