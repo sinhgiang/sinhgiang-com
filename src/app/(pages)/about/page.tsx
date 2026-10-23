@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Avatar } from "@/components/avatar";
 import { PageTitle } from "@/components/section";
-import { howIWork, links, listNames, products, profile } from "@/lib/site";
+import { faq, howIWork, links, listNames, pages, products, profile } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import { aboutJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -21,9 +21,7 @@ export default function AboutPage() {
       </div>
 
       <div className="mt-8 space-y-4 leading-relaxed">
-        <p>
-          I&apos;m a founder and product builder from Vietnam. {profile.intro}
-        </p>
+        <p>{pages.about.answer}</p>
         <p>
           Right now I build {listNames(products.map((p) => p.name))}. See them all on the{" "}
           <Link href="/projects" className="underline underline-offset-4">
@@ -51,6 +49,16 @@ export default function AboutPage() {
           </li>
         ))}
       </ul>
+
+      <h2 className="mt-12 mb-4 text-sm font-medium text-muted">Questions people ask</h2>
+      <dl className="divide-y divide-border">
+        {faq.map((item) => (
+          <div key={item.question} className="py-4">
+            <dt className="font-medium">{item.question}</dt>
+            <dd className="mt-1 leading-relaxed text-muted">{item.answer}</dd>
+          </div>
+        ))}
+      </dl>
 
       <h2 className="mt-12 mb-4 text-sm font-medium text-muted">Find me</h2>
       <p className="flex gap-4">

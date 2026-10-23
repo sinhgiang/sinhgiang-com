@@ -3,13 +3,13 @@
 Personal website of Sinh Giang: products, writing, stack and about.
 
 - Next.js (App Router), Tailwind CSS, deployed on Vercel.
-- All content lives in `src/lib/site.ts`: profile, products, stack, timeline, posts, and the title and description of each page.
+- All content lives in `src/lib/site.ts`: profile, products, stack, timeline, posts, and the title, description and short answer of each page, and the FAQ.
 - To publish a post, add it to `posts` in `src/lib/site.ts` (slug, title, date, summary, body). It gets its own page at `/writing/<slug>`, and the sitemap, `llms.txt`, `llms-full.txt` and the JSON-LD pick it up at the next build. The Writing page shows "Coming soon" while the list is empty.
 
 ```bash
 npm ci
 npm run dev   # http://localhost:3000
-npm test      # checks llms.txt, sitemap, robots, metadata and JSON-LD
+npm test      # checks llms.txt, sitemap, robots, metadata, JSON-LD, share images and the brand voice
 npm run build
 ```
 
@@ -25,9 +25,13 @@ Everything below is generated at build time from `src/lib/site.ts`; nothing is w
 | `/llms-full.txt` | Every page in one Markdown file, with the full text of each post | `src/lib/llms.ts` |
 | `/index.md`, `/about.md`, ... | Markdown copy of each page, linked from the page head | `src/lib/llms.ts` |
 | Page `<head>` | Title, description, canonical URL, Open Graph, X card | `src/lib/seo.ts` |
-| JSON-LD | Person, WebSite, ProfilePage, apps, Blog and BlogPosting (schema.org) | `src/lib/seo.ts` |
+| Share image | One 1200x630 image per page and post (`og:image`, `twitter:image`), drawn from the page title and description | `src/lib/og.tsx`, `opengraph-image.tsx` and `twitter-image.tsx` next to each page |
+| JSON-LD | Person, WebSite, ProfilePage, FAQPage, BreadcrumbList, apps, Blog and BlogPosting (schema.org) | `src/lib/seo.ts` |
+| 404 page | Answers 404 with `noindex` and links to every page | `src/app/not-found.tsx` |
 
 The JSON-LD only states what the site already says: no prices, ratings or download counts.
+
+The voice, the words to avoid, the keywords and the questions each page answers are in [docs/brand-voice.md](docs/brand-voice.md).
 
 ## Deploying
 

@@ -2,6 +2,7 @@
 // (format: https://llmstxt.org) from the same data the pages render, so they
 // change whenever the site content changes.
 import {
+  faq as allFaq,
   howIWork,
   links,
   pages,
@@ -10,6 +11,7 @@ import {
   profile,
   stack as allStack,
   timeline as allTimeline,
+  type AnswerPageKey,
   type PageKey,
   type Post,
   type Product,
@@ -50,10 +52,18 @@ function profilesSection(level: "##" | "###"): string[] {
   return [`${level} Profiles`, "", ...links.map((link) => `- [${link.label}](${link.href})`), ""];
 }
 
+// The short answer that opens an inner page, the same text the web page shows.
+function answerLines(key: AnswerPageKey): string[] {
+  return [pages[key].answer, ""];
+}
+
+function faqSection(level: "##" | "###"): string[] {
+  return [`${level} Questions people ask`, "", ...allFaq.flatMap((item) => [`**${item.question}**`, "", item.answer, ""])];
+}
+
 function aboutSection(): string[] {
   return [
-    `I'm a ${profile.role.toLowerCase()} from ${profile.country}. ${profile.intro}`,
-    "",
+    ...answerLines("about"),
     "### How I work",
     "",
     ...howIWork.map((item) => `- ${item}`),
@@ -142,12 +152,12 @@ export function buildLlmsTxt(data: LlmsData = defaultData): string {
 export function buildLlmsFullTxt(data: LlmsData = defaultData): string {
   const lines = [`# ${profile.name}`, "", ...summary(), ...intro()];
 
-  lines.push("## About", "", `Source: ${absoluteUrl(pages.about.path)}`, "", ...aboutSection());
-  lines.push("## Projects", "", `Source: ${absoluteUrl(pages.projects.path)}`, "", ...projectsSection(data.products));
-  lines.push("## Stack", "", `Source: ${absoluteUrl(pages.stack.path)}`, "", ...stackSection(data.stack));
+  lines.push("## About", "", `Source: ${absoluteUrl(pages.about.path)}`, "", ...aboutSection(), ...faqSection("###"));
+  lines.push("## Projects", "", `Source: ${absoluteUrl(pages.projects.path)}`, "", ...answerLines("projects"), ...projectsSection(data.products));
+  lines.push("## Stack", "", `Source: ${absoluteUrl(pages.stack.path)}`, "", ...answerLines("stack"), ...stackSection(data.stack));
   lines.push("## Timeline", "", `Source: ${absoluteUrl(pages.home.path)}`, "", ...timelineSection(data.timeline));
 
-  lines.push("## Writing", "", `Source: ${absoluteUrl(pages.writing.path)}`, "");
+  lines.push("## Writing", "", `Source: ${absoluteUrl(pages.writing.path)}`, "", ...answerLines("writing"));
   if (data.posts.length === 0) lines.push("No posts yet.", "");
   for (const post of data.posts) lines.push(...postSection(post));
 
@@ -169,16 +179,16 @@ export function buildPageMarkdown(key: PageKey, data: LlmsData = defaultData): s
       lines.push(...profilesSection("##"));
       break;
     case "about":
-      lines.push(...aboutSection(), ...profilesSection("##"));
+      lines.push(...aboutSection(), ...faqSection("##"), ...profilesSection("##"));
       break;
     case "projects":
-      lines.push(...projectsSection(data.products));
+      lines.push(...answerLines("projects"), ...projectsSection(data.products));
       break;
     case "stack":
-      lines.push(...stackSection(data.stack));
+      lines.push(...answerLines("stack"), ...stackSection(data.stack));
       break;
     case "writing":
-      lines.push(...postListSection(data.posts));
+      lines.push(...answerLines("writing"), ...postListSection(data.posts));
       break;
   }
 

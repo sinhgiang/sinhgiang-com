@@ -206,7 +206,70 @@ export type Post = {
 // The Writing page shows "Coming soon" while the list is empty.
 export const posts: Post[] = [];
 
+const statusLabel: Record<ProductStatus, string> = {
+  Live: "Live",
+  "Coming soon": "Coming soon",
+  "Private use": "In private use",
+};
+
+// "Live: A, B and C. Coming soon: D. In private use: E." Built from the product list.
+function statusSummary(list: Product[]): string {
+  return (Object.keys(statusLabel) as ProductStatus[])
+    .map((status) => ({ status, names: list.filter((p) => p.status === status).map((p) => p.name) }))
+    .filter((group) => group.names.length > 0)
+    .map((group) => `${statusLabel[group.status]}: ${listNames(group.names)}.`)
+    .join(" ");
+}
+
+// The short, direct answer that opens each inner page. The same text is shown on
+// the page, repeated in the Markdown copy and in llms.txt, so a fact lives in one place.
+const answers = {
+  writing: `I write notes on designing AI products and shipping them with AI coding agents.${
+    posts.length === 0 ? " The first posts are coming soon." : ` There ${posts.length === 1 ? "is 1 post" : `are ${posts.length} posts`} so far.`
+  }`,
+  projects: `I've built ${products.length} products with AI coding agents. ${statusSummary(products)}`,
+  stack:
+    "I write code with Claude Code, run one agent per project with Helme, review every change on GitHub and host on Vercel. Web apps use TypeScript and Next.js, the desktop app Electron and the mobile app Flutter. Supabase holds the data.",
+  about: `I'm ${profile.name}, a ${profile.role.toLowerCase()} from ${profile.country}. ${profile.intro}`,
+};
+
+// Questions people ask about the site's owner, answered from the data above.
+// Shown on the About page, in the FAQPage JSON-LD, in about.md and in llms-full.txt.
+const helme = products.find((product) => product.name === "Helme");
+
+export const faq: { question: string; answer: string }[] = [
+  {
+    question: `Who is ${profile.name}?`,
+    answer: `I'm a ${profile.role.toLowerCase()} from ${profile.country}. I've built ${products.length} products with AI coding agents, and I own the spec, the decisions and the final review of each.`,
+  },
+  {
+    question: `What products has ${profile.name} built?`,
+    answer: `${products.length} products: ${listNames(products.map((p) => p.name))}. ${statusSummary(products)}`,
+  },
+  {
+    question: `How does ${profile.name} build products with AI coding agents?`,
+    answer: `${howIWork[0]} ${howIWork[1]}`,
+  },
+  {
+    question: `Which tools does ${profile.name} use?`,
+    answer: `${howIWork[2]} The full list is on the Stack page.`,
+  },
+  ...(helme
+    ? [
+        {
+          question: "Can I use Helme?",
+          answer: `${helme.status === "Private use" ? "Not yet. Helme is in private use today." : `Helme is ${helme.status.toLowerCase()}.`} It is the control room I use to run one AI coding agent per project. More at ${helme.url.replace("https://", "")}.`,
+        },
+      ]
+    : []),
+  {
+    question: `Where can I follow ${profile.name}'s work?`,
+    answer: `On ${listNames(links.map((link) => link.label))}. Code and releases are on GitHub.`,
+  },
+];
+
 // Title and description of each page, used for metadata, the sitemap and llms.txt.
+// `answer` is the short answer that opens the page (the home page opens with its own lead).
 export const pages = {
   home: {
     path: "/",
@@ -217,27 +280,30 @@ export const pages = {
     path: "/writing",
     title: "Writing",
     description: `Notes by ${profile.name} on designing AI products and shipping them with AI coding agents.`,
+    answer: answers.writing,
   },
   projects: {
     path: "/projects",
     title: "Projects",
     description: `Products ${profile.name} designs and ships with AI coding agents: ${listNames(products.map((p) => p.name))}.`,
+    answer: answers.projects,
   },
   stack: {
     path: "/stack",
     title: "Stack",
-    description: `The tools ${profile.name} uses to design, build and ship products: ${listNames(
-      stack.flatMap((group) => group.items.map((item) => item.name)),
-    )}.`,
+    description: `The tools ${profile.name} uses to build and ship products, from Claude Code and Helme to Next.js, Flutter, Supabase and Vercel.`,
+    answer: answers.stack,
   },
   about: {
     path: "/about",
     title: "About",
     description: `About ${profile.name}, a founder and product builder from Vietnam who ships AI products end to end with AI coding agents.`,
+    answer: answers.about,
   },
 } as const;
 
 export type PageKey = keyof typeof pages;
+export type AnswerPageKey = Exclude<PageKey, "home">;
 
 export function listNames(names: string[]): string {
   return names.length < 2 ? names.join("") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;

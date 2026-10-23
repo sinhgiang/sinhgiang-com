@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import type {
   BlogPosting,
   Blog,
+  BreadcrumbList,
   CollectionPage,
+  FAQPage,
   Graph,
   ItemList,
   Person,
@@ -12,6 +14,7 @@ import type {
   WebSite,
 } from "schema-dts";
 import {
+  faq,
   links,
   pages,
   posts as allPosts,
@@ -89,9 +92,8 @@ function buildMetadata({
       siteName: profile.name,
       locale: "en_US",
       type,
-      images: [{ url: absoluteUrl(profile.avatar), width: 400, height: 400, alt: profile.name }],
     },
-    twitter: { card: "summary", title: fullTitle, description, creator: "@sinhgiangfd" },
+    twitter: { card: "summary_large_image", title: fullTitle, description, creator: "@sinhgiangfd" },
   };
 }
 
@@ -156,6 +158,35 @@ function graph(...nodes: Thing[]): Graph {
   return { "@context": "https://schema.org", "@graph": nodes };
 }
 
+// Home > page (> post). Gives search engines the path to an inner page.
+export function breadcrumbJsonLd(trail: { name: string; path: string }[]): BreadcrumbList {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: [{ name: "Home", path: "/" }, ...trail].map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: absoluteUrl(crumb.path),
+    })),
+  };
+}
+
+function pageCrumbs(key: PageKey): BreadcrumbList {
+  return breadcrumbJsonLd([{ name: pages[key].title, path: pages[key].path }]);
+}
+
+export function faqJsonLd(items = faq): FAQPage {
+  return {
+    "@type": "FAQPage",
+    "@id": `${absoluteUrl(pages.about.path)}#faq`,
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
 export function homeJsonLd(products = allProducts): Graph {
   const itemList: ItemList = {
     "@type": "ItemList",
@@ -172,7 +203,7 @@ export function homeJsonLd(products = allProducts): Graph {
 
 export function aboutJsonLd(): Graph {
   const page: ProfilePage = { ...pageJsonLd("about", "ProfilePage"), mainEntity: { "@id": personId } };
-  return graph(personJsonLd(), page);
+  return graph(personJsonLd(), page, faqJsonLd(), pageCrumbs("about"));
 }
 
 export function projectsJsonLd(products = allProducts): Graph {
@@ -187,7 +218,7 @@ export function projectsJsonLd(products = allProducts): Graph {
       })),
     },
   };
-  return graph(personJsonLd(), page);
+  return graph(personJsonLd(), page, pageCrumbs("projects"));
 }
 
 export function stackJsonLd(): Graph {
@@ -205,7 +236,7 @@ export function stackJsonLd(): Graph {
         })),
     },
   };
-  return graph(personJsonLd(), page);
+  return graph(personJsonLd(), page, pageCrumbs("stack"));
 }
 
 export function articleJsonLd(post: Post): BlogPosting {
@@ -233,11 +264,18 @@ export function writingJsonLd(posts = allPosts): Graph {
     author: { "@id": personId },
     blogPost: posts.map((post) => articleJsonLd(post)),
   };
-  return graph(personJsonLd(), { ...pageJsonLd("writing", "CollectionPage"), mainEntity: blog });
+  return graph(personJsonLd(), { ...pageJsonLd("writing", "CollectionPage"), mainEntity: blog }, pageCrumbs("writing"));
 }
 
 export function postJsonLd(post: Post): Graph {
-  return graph(personJsonLd(), articleJsonLd(post));
+  return graph(
+    personJsonLd(),
+    articleJsonLd(post),
+    breadcrumbJsonLd([
+      { name: pages.writing.title, path: pages.writing.path },
+      { name: post.title, path: `/writing/${post.slug}` },
+    ]),
+  );
 }
 
 
