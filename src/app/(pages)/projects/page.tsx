@@ -1,6 +1,6 @@
 import { ProductLogo } from "@/components/product-logo";
 import { PageTitle } from "@/components/section";
-import { products } from "@/lib/site";
+import { pages, products } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import { projectsJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -10,10 +10,7 @@ export default function ProjectsPage() {
   return (
     <>
       <JsonLd data={projectsJsonLd()} />
-      <PageTitle
-        title="Projects"
-        intro="Products I design and ship end to end with AI coding agents. I own the spec, the decisions and the final review."
-      />
+      <PageTitle title="Projects" intro={pages.projects.answer} />
       <ul className="mt-10 divide-y divide-border">
         {products.map((product) => (
           <li key={product.name} className="flex gap-4 py-6">

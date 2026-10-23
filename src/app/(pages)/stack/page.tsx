@@ -1,5 +1,5 @@
 import { PageTitle } from "@/components/section";
-import { stack } from "@/lib/site";
+import { pages, stack } from "@/lib/site";
 import { JsonLd } from "@/components/json-ld";
 import { stackJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -9,7 +9,7 @@ export default function StackPage() {
   return (
     <>
       <JsonLd data={stackJsonLd()} />
-      <PageTitle title="Stack" intro="The tools I use every day to design, build and ship my products." />
+      <PageTitle title="Stack" intro={pages.stack.answer} />
       {stack.map((group) => (
         <section key={group.group} className="mt-12">
           <h2 className="mb-4 text-sm font-medium text-muted">{group.group}</h2>
